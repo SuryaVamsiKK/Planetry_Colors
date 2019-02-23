@@ -29,6 +29,8 @@ public class QuadTreePlanetry : MonoBehaviour
 
     void Update()
     {
+        
+
         if(Vector3.Distance(GameObject.FindGameObjectWithTag("Player").transform.position, transform.position) < threshold && maxDepth > 0)
         {
             divide = true;

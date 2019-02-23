@@ -37,7 +37,14 @@ public class MeshGenerator : MonoBehaviour
 
     #endregion
 
-   
+    private void Update()
+    {
+        if(lod <= 1)
+        {
+            GetComponent<MeshRenderer>().enabled = false;
+        }
+    }
+
     public void CreateShape()
     {
         #region Initalization
