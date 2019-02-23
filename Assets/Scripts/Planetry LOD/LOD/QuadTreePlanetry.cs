@@ -56,6 +56,11 @@ public class QuadTreePlanetry : MonoBehaviour
 
     void quadTree()
     {
+        if(GetComponent<MeshGenerator>().lod <= 0)
+        {
+            GetComponent<MeshGenerator>().mat = transform.parent.GetComponent<PlanetGenerator>().mat;
+        }
+
         if(divide)
         {
             this.GetComponent<MeshRenderer>().enabled = false;
@@ -64,7 +69,7 @@ public class QuadTreePlanetry : MonoBehaviour
                 GameObject g = GameObject.Instantiate(GetComponent<MeshGenerator>().chunk, transform);
                 g.GetComponent<MeshGenerator>().lod = GetComponent<MeshGenerator>().lod + 1;
                 g.name = "LOD : " + g.GetComponent<MeshGenerator>().lod;
-                g.GetComponent<MeshRenderer> ().sharedMaterial = GetComponent<MeshGenerator>().mat;
+                g.GetComponent<MeshGenerator>().mat = GetComponent<MeshGenerator>().mat;
                 
                 MeshGenerator g_MeshGenerator =  g.GetComponent<MeshGenerator>();
                 g_MeshGenerator.quad_Location = i;

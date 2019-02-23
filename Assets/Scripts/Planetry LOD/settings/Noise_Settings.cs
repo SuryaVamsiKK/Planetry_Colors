@@ -13,4 +13,9 @@ public class Noise_Settings
     public Vector3 center;
     public bool seaClamp = false;
     public float minValue;
+    public NoiseType type;
+
+    public float weightMultiplyer;
 }
+
+public enum NoiseType { Simple, Rigid }

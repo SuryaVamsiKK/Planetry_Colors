@@ -27,28 +27,70 @@ public class NoiseFilter
         {
             if(shapeSettings.noiseLayer[a].enable)
             {
-                float noiseValue = 0;
-                float frequency = shapeSettings.noiseLayer[a].noiseSettings.baseRoughness;
-                float amplitude = 1;
-
-                for (int i = 0; i < shapeSettings.noiseLayer[a].noiseSettings.numOfLayers; i++)
+                switch (shapeSettings.noiseLayer[a].noiseSettings.type)
                 {
-                    float v = noise.Evaluate(pointOnSphere * frequency + shapeSettings.noiseLayer[a].noiseSettings.center);
-                    noiseValue += (v + 1) * 0.5f * amplitude;
-                    frequency *= shapeSettings.noiseLayer[a].noiseSettings.roughness;
-                    amplitude *= shapeSettings.noiseLayer[a].noiseSettings.persistance;
+                    case NoiseType.Simple:
+                        elaviation += SimpleNoiseValue(a, pointOnSphere) * shapeSettings.noiseLayer[a].noiseSettings.strength;
+                        break;
+                    case NoiseType.Rigid:
+                        elaviation += RighidNoiseValue(a, pointOnSphere) * shapeSettings.noiseLayer[a].noiseSettings.strength;
+                        break;
+                    default:
+                        break;
                 }
-
-                if (shapeSettings.noiseLayer[a].noiseSettings.seaClamp)
-                {
-                    noiseValue = Mathf.Max(0, noiseValue - shapeSettings.noiseLayer[a].noiseSettings.minValue);
-                }
-
-                elaviation += noiseValue * shapeSettings.noiseLayer[a].noiseSettings.strength;
             }
         }
 
         
         return pointOnSphere * shapeSettings.radius * (elaviation + 1f);
+    }
+
+    public float RighidNoiseValue(int a, Vector3 pointOnSphere)
+    {
+        float noiseValue = 0;
+        float frequency = shapeSettings.noiseLayer[a].noiseSettings.baseRoughness;
+        float amplitude = 1;
+        float weight = 1;
+
+        for (int i = 0; i < shapeSettings.noiseLayer[a].noiseSettings.numOfLayers; i++)
+        {
+            float v = 1 - Mathf.Abs(noise.Evaluate(pointOnSphere * frequency + shapeSettings.noiseLayer[a].noiseSettings.center));
+            v *= v;
+            v *= weight;
+            weight = v * shapeSettings.noiseLayer[a].noiseSettings.weightMultiplyer;
+
+            noiseValue += v * amplitude;
+            frequency *= shapeSettings.noiseLayer[a].noiseSettings.roughness;
+            amplitude *= shapeSettings.noiseLayer[a].noiseSettings.persistance;
+        }
+
+        if (shapeSettings.noiseLayer[a].noiseSettings.seaClamp)
+        {
+            noiseValue = Mathf.Max(0, noiseValue - shapeSettings.noiseLayer[a].noiseSettings.minValue);
+        }
+
+        return noiseValue;
+    }
+
+    public float SimpleNoiseValue(int a, Vector3 pointOnSphere)
+    {
+        float noiseValue = 0;
+        float frequency = shapeSettings.noiseLayer[a].noiseSettings.baseRoughness;
+        float amplitude = 1;
+
+        for (int i = 0; i < shapeSettings.noiseLayer[a].noiseSettings.numOfLayers; i++)
+        {
+            float v = noise.Evaluate(pointOnSphere * frequency + shapeSettings.noiseLayer[a].noiseSettings.center);
+            noiseValue += (v + 1) * 0.5f * amplitude;
+            frequency *= shapeSettings.noiseLayer[a].noiseSettings.roughness;
+            amplitude *= shapeSettings.noiseLayer[a].noiseSettings.persistance;
+        }
+
+        if (shapeSettings.noiseLayer[a].noiseSettings.seaClamp)
+        {
+            noiseValue = Mathf.Max(0, noiseValue - shapeSettings.noiseLayer[a].noiseSettings.minValue);
+        }
+
+        return noiseValue;
     }
 }
