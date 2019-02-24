@@ -104,10 +104,9 @@ public class MeshGenerator : MonoBehaviour
                 #region Vertices
 
                 verts[i] = (localUp + (localVert.x + pos) * scale * axisA - (localVert.y + pos) * scale * axisB);
-                verts[i] = verts[i].normalized;               
-                verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i]); 
+                verts[i] = verts[i].normalized;
+                verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i]);
                 i++;
-
                 #endregion
 
                 if (x!= shapeSettings.resolution && z!= shapeSettings.resolution)
