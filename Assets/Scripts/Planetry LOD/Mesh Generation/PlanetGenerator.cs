@@ -12,54 +12,91 @@ public class PlanetGenerator : MonoBehaviour {
     public Material mat;
     [Header("LOD")] public LOD_Settings lodSettings;
 
-    //public ColorGenerator colorGenerator;
+    [Space] public bool recreate;
 
-    private void OnValidate()
-    {
-        //mat = GetComponent<ColorSettings>().mat;
-        CreatePlanet();
-    }
+    bool singleFace = false;
 
-    public void CreatePlanet()
+    void OnValidate () 
     {
-        //colorGenerator = new ColorGenerator(GetComponent<ColorSettings>());
-        if (transform.childCount < 6)
-        {
-            for (int i = 0; i < directions.Length; i++)
+        if (!singleFace)
+        {       
+            if (transform.childCount < 6) 
             {
-                GameObject g = GameObject.Instantiate(chunk, this.transform) as GameObject;
-                g.transform.position -= this.transform.position;
-                g.name = "Chunk : " + names[i] + " : LOD : " + g.GetComponent<MeshGenerator>().lod;
+                for (int i = 0; i < directions.Length; i++) 
+                {
+                    GameObject g = GameObject.Instantiate (chunk, this.transform) as GameObject;
+                    g.transform.position -= this.transform.position;
+                    g.name = "Chunk : " + names[i] + " : LOD : " + g.GetComponent<MeshGenerator>().lod;
 
-                MeshGenerator g_MeshGenerator = g.GetComponent<MeshGenerator>();
-                //g_MeshGenerator.mat = GetComponent<ColorSettings>().mat;
-                g_MeshGenerator.chunk = chunk;
-                g_MeshGenerator.localUp = directions[i];
-                g_MeshGenerator.shapeSettings = shapeSettings;
-                g_MeshGenerator.CreateShape();
-                //colorGenerator.UpdateElaviation(g_MeshGenerator.noiseFilter.elivationMinMax);
-                g_MeshGenerator.UpdateMesh();
+                    MeshGenerator g_MeshGenerator =  g.GetComponent<MeshGenerator>();
+                    g_MeshGenerator.mat = mat;
+                    g_MeshGenerator.chunk = chunk;
+                    g_MeshGenerator.localUp = directions[i];
+                    g_MeshGenerator.shapeSettings = shapeSettings;
+                    g_MeshGenerator.CreateShape();
+                    g_MeshGenerator.UpdateMesh();
+                }
+            }
+        
+            //this only for live editing or else entire ELSE can be removed
+            else
+            {
+                for (int i = 0; i < directions.Length; i++) 
+                {
+                    GameObject g = transform.GetChild (i).gameObject;
+                    g.transform.position -= this.transform.position;
+                    g.name = "Chunk : " + names[i] + " : LOD : " + g.GetComponent<MeshGenerator>().lod;
+
+                    MeshGenerator g_MeshGenerator =  g.GetComponent<MeshGenerator>();
+                    g_MeshGenerator.mat = mat;
+                    g_MeshGenerator.chunk = chunk;
+                    g_MeshGenerator.localUp = directions[i];
+                    g_MeshGenerator.shapeSettings = shapeSettings;
+                    g_MeshGenerator.CreateShape();
+                    g_MeshGenerator.UpdateMesh();
+
+                }
             }
         }
-
-        //this only for live editing or else entire ELSE can be removed
         else
-        {
-            for (int i = 0; i < directions.Length; i++)
+        {       
+            if (transform.childCount < 1) 
             {
-                GameObject g = transform.GetChild(i).gameObject;
-                g.transform.position -= this.transform.position;
-                g.name = "Chunk : " + names[i] + " : LOD : " + g.GetComponent<MeshGenerator>().lod;
+                for (int i = 0; i < 1; i++) 
+                {
+                    GameObject g = GameObject.Instantiate (chunk, this.transform) as GameObject;
+                    g.transform.position -= this.transform.position;
+                    g.name = "Chunk : " + names[i] + " : LOD : " + g.GetComponent<MeshGenerator>().lod;
 
-                MeshGenerator g_MeshGenerator = g.GetComponent<MeshGenerator>();
-                //g_MeshGenerator.mat = GetComponent<ColorSettings>().mat;
-                g_MeshGenerator.chunk = chunk;
-                g_MeshGenerator.localUp = directions[i];
-                g_MeshGenerator.shapeSettings = shapeSettings;
-                g_MeshGenerator.CreateShape();
-                //colorGenerator.UpdateElaviation(g_MeshGenerator.noiseFilter.elivationMinMax);
-                g_MeshGenerator.UpdateMesh();
+                    MeshGenerator g_MeshGenerator =  g.GetComponent<MeshGenerator>();
+                    g_MeshGenerator.mat = mat;
+                    g_MeshGenerator.chunk = chunk;
+                    g_MeshGenerator.localUp = directions[i];
+                    g_MeshGenerator.shapeSettings = shapeSettings;
+                    g_MeshGenerator.CreateShape();
+                    g_MeshGenerator.UpdateMesh();
+                }
             }
-        }
+        
+            //this only for live editing or else entire ELSE can be removed
+            else
+            {
+                for (int i = 0; i < 1; i++) 
+                {
+                    GameObject g = transform.GetChild (i).gameObject;
+                    g.transform.position -= this.transform.position;
+                    g.name = "Chunk : " + names[i] + " : LOD : " + g.GetComponent<MeshGenerator>().lod;
+
+                    MeshGenerator g_MeshGenerator =  g.GetComponent<MeshGenerator>();
+                    g_MeshGenerator.mat = mat;
+                    g_MeshGenerator.chunk = chunk;
+                    g_MeshGenerator.localUp = directions[i];
+                    g_MeshGenerator.shapeSettings = shapeSettings;
+                    g_MeshGenerator.CreateShape();
+                    g_MeshGenerator.UpdateMesh();
+
+                }
+            }            
+        }    
     }
 }

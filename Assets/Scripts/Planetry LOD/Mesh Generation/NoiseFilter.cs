@@ -6,11 +6,9 @@ public class NoiseFilter
 {
     Shape_Settings shapeSettings = new Shape_Settings();
     Noise noise = new Noise();
-    public MinMax elivationMinMax;
 
     public NoiseFilter(Shape_Settings shapeSettings)
     {
-        elivationMinMax = new MinMax();
         this.shapeSettings = shapeSettings;
     }
 
@@ -43,9 +41,8 @@ public class NoiseFilter
             }
         }
 
-        elaviation = shapeSettings.radius * (elaviation + 1f);
-        elivationMinMax.AddValue(elaviation);
-        return pointOnSphere * elaviation;
+        
+        return pointOnSphere * shapeSettings.radius * (elaviation + 1f);
     }
 
     public float RighidNoiseValue(int a, Vector3 pointOnSphere)

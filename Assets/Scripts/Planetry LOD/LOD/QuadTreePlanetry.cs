@@ -5,7 +5,7 @@ using UnityEngine;
 public class QuadTreePlanetry : MonoBehaviour
 {
     [HideInInspector] public float threshold = 2f;
-    [HideInInspector] public bool divide = false;
+    public bool divide = false;
     [HideInInspector] public bool recreate = false;
     [HideInInspector] public bool revertToHigherLOD = false;
     [HideInInspector] public int maxDepth = 0;
@@ -17,7 +17,7 @@ public class QuadTreePlanetry : MonoBehaviour
     {
         if(transform.parent.GetComponent<QuadTreePlanetry>() != null)
         {
-            maxDepth = transform.parent.GetComponent<QuadTreePlanetry>().maxDepth - 1;  
+            maxDepth = transform.parent.GetComponent<QuadTreePlanetry>().maxDepth - 1;
             threshold = transform.parent.GetComponent<QuadTreePlanetry>().threshold / 2;
         }
         else
@@ -29,6 +29,8 @@ public class QuadTreePlanetry : MonoBehaviour
 
     void Update()
     {
+        
+
         if(Vector3.Distance(GameObject.FindGameObjectWithTag("Player").transform.position, transform.position) < threshold && maxDepth > 0)
         {
             divide = true;

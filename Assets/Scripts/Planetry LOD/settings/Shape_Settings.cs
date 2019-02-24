@@ -13,7 +13,6 @@ public class Shape_Settings
     public class NoiseLayer
     {
         public bool enable = true;
-        [ConditionalHide("enable", 0)]
         public Noise_Settings noiseSettings;
     }
 }
