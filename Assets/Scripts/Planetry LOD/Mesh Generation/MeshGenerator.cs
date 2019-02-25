@@ -103,9 +103,24 @@ public class MeshGenerator : MonoBehaviour
 
                 #region Vertices
 
+                float elevaltion = 0;
                 verts[i] = (localUp + (localVert.x + pos) * scale * axisA - (localVert.y + pos) * scale * axisB);
                 verts[i] = verts[i].normalized;               
-                verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i]); 
+                verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i], out elevaltion);
+
+                if(lod == 0)
+                {
+                   transform.parent.GetComponent<PlanetGenerator>().elevationMinMax.AddValue(elevaltion);
+                }
+
+                //Transform root = transform.parent;
+                //for (int a = 0; a < lod; a++)
+                //{
+                //    root = transform.parent;
+                //}
+                //root.GetComponent<PlanetGenerator>().elevationMinMax.AddValue(elevaltion);
+
+
                 i++;
 
                 #endregion

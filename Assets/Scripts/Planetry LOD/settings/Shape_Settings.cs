@@ -6,6 +6,7 @@ using UnityEngine;
 public class Shape_Settings
 {
     [Range(1, 256)] public int resolution = 10;
+    [Range(1, 256)] public int realResolution = 10;
     public float radius;
     [Header("Noise")] public NoiseLayer[] noiseLayer;
 
@@ -13,6 +14,7 @@ public class Shape_Settings
     public class NoiseLayer
     {
         public bool enable = true;
+        [ConditionalHide("enable", 1)]
         public Noise_Settings noiseSettings;
     }
 }

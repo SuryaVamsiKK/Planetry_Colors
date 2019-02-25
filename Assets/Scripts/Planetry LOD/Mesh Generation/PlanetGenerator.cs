@@ -9,15 +9,27 @@ public class PlanetGenerator : MonoBehaviour {
     string[] names = { "Up", "Down", "Left", "Right", "Front", "Back" };
     
     [Header("Shape")] public Shape_Settings shapeSettings;
-    public Material mat;
+    [HideInInspector] public Material mat;
     [Header("LOD")] public LOD_Settings lodSettings;
-
-    [Space] public bool recreate;
-
     bool singleFace = false;
+    [HideInInspector] public float min;
+    [HideInInspector] public float max;
 
-    void OnValidate () 
+    public MinMax elevationMinMax;
+
+    private void Awake()
     {
+        shapeSettings.resolution = shapeSettings.realResolution;
+    }
+
+    void OnValidate()
+    {
+        CreatePlanet();
+    }
+
+    public void CreatePlanet () 
+    {
+        elevationMinMax = new MinMax();
         if (!singleFace)
         {       
             if (transform.childCount < 6) 
@@ -97,6 +109,12 @@ public class PlanetGenerator : MonoBehaviour {
 
                 }
             }            
-        }    
+        }
+
+        min = elevationMinMax.Min;
+        max = elevationMinMax.Max;
+
+        GetComponent<ColorGenerator>().CreateMaterial(min, max);
+        mat = GetComponent<ColorGenerator>().material;
     }
 }

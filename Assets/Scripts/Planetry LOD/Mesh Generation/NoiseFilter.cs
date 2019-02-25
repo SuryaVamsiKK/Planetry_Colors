@@ -18,7 +18,7 @@ public class NoiseFilter
         return noisevalue;
     }
 
-    public Vector3 CalculatePointOnPlanet(Vector3 pointOnSphere)
+    public Vector3 CalculatePointOnPlanet(Vector3 pointOnSphere, out float elevation)
     {
         //float elaviation = (noiseEvaluation(pointOnSphere * noiseSettings.roughness + noiseSettings.center)) * noiseSettings.strength;
         //return pointOnSphere * shapeSettings.radius * (elaviation + 1f);
@@ -41,8 +41,9 @@ public class NoiseFilter
             }
         }
 
-        
-        return pointOnSphere * shapeSettings.radius * (elaviation + 1f);
+        elaviation = shapeSettings.radius * (elaviation + 1f);
+        elevation = elaviation;
+        return pointOnSphere * elaviation;
     }
 
     public float RighidNoiseValue(int a, Vector3 pointOnSphere)

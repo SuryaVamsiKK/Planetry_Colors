@@ -5,17 +5,21 @@ using UnityEngine;
 [System.Serializable]
 public class Noise_Settings
 {
-    public float strength = 1;
+    public NoiseType type;
+
+    [Header("Noise : Pattern")]
     [Range(1,8)] public int numOfLayers = 1;
+    public float strength = 1;
     public float baseRoughness = 1;
     public float roughness = 2;
     public float persistance = .5f;
+    [ConditionalHide("type" , 1)] public float weightMultiplyer;
+
+    [Header("Nosie : Position")]
     public Vector3 center;
     public bool seaClamp = false;
-    public float minValue;
-    public NoiseType type;
+    [ConditionalHide("seaClamp", 1)] public float minValue;
 
-    public float weightMultiplyer;
 }
 
 public enum NoiseType { Simple, Rigid }
