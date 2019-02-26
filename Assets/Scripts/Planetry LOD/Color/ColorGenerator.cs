@@ -28,6 +28,8 @@ public class ColorGenerator : MonoBehaviour
 
         material.SetVector("_elivationMinMax", new Vector4(min, max));
         UpdateColor();
+        material.SetFloat("_specular", settings.specular);
+        material.SetFloat("_smoothness", settings.smoothness);
         material.name = settings.matName;
     }
 
