@@ -76,6 +76,7 @@ public class QuadTreePlanetry : MonoBehaviour
                 g_MeshGenerator.chunk = GetComponent<MeshGenerator>().chunk;
                 g_MeshGenerator.localUp = GetComponent<MeshGenerator>().localUp;
                 g_MeshGenerator.shapeSettings = GetComponent<MeshGenerator>().shapeSettings;
+                g_MeshGenerator.colorGenerator = GetComponent<MeshGenerator>().colorGenerator;
                 g_MeshGenerator.CreateShape();
                 g_MeshGenerator.UpdateMesh(); 
             }
@@ -98,6 +99,7 @@ public class QuadTreePlanetry : MonoBehaviour
                     g_MeshGenerator.chunk = GetComponent<MeshGenerator>().chunk;
                     g_MeshGenerator.localUp = GetComponent<MeshGenerator>().localUp;
                     g_MeshGenerator.shapeSettings = GetComponent<MeshGenerator>().shapeSettings;
+                    g_MeshGenerator.colorGenerator = GetComponent<MeshGenerator>().colorGenerator;
                     g_MeshGenerator.CreateShape();
                     g_MeshGenerator.UpdateMesh();
                 }

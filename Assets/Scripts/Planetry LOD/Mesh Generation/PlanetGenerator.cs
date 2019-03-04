@@ -45,6 +45,7 @@ public class PlanetGenerator : MonoBehaviour {
                     g_MeshGenerator.chunk = chunk;
                     g_MeshGenerator.localUp = directions[i];
                     g_MeshGenerator.shapeSettings = shapeSettings;
+                    g_MeshGenerator.colorGenerator = GetComponent<ColorGenerator>();
                     g_MeshGenerator.CreateShape();
                     g_MeshGenerator.UpdateMesh();
                 }
@@ -64,6 +65,7 @@ public class PlanetGenerator : MonoBehaviour {
                     g_MeshGenerator.chunk = chunk;
                     g_MeshGenerator.localUp = directions[i];
                     g_MeshGenerator.shapeSettings = shapeSettings;
+                    g_MeshGenerator.colorGenerator = GetComponent<ColorGenerator>();
                     g_MeshGenerator.CreateShape();
                     g_MeshGenerator.UpdateMesh();
 
@@ -85,6 +87,7 @@ public class PlanetGenerator : MonoBehaviour {
                     g_MeshGenerator.chunk = chunk;
                     g_MeshGenerator.localUp = directions[i];
                     g_MeshGenerator.shapeSettings = shapeSettings;
+                    g_MeshGenerator.colorGenerator = GetComponent<ColorGenerator>();
                     g_MeshGenerator.CreateShape();
                     g_MeshGenerator.UpdateMesh();
                 }
@@ -104,6 +107,7 @@ public class PlanetGenerator : MonoBehaviour {
                     g_MeshGenerator.chunk = chunk;
                     g_MeshGenerator.localUp = directions[i];
                     g_MeshGenerator.shapeSettings = shapeSettings;
+                    g_MeshGenerator.colorGenerator = GetComponent<ColorGenerator>();
                     g_MeshGenerator.CreateShape();
                     g_MeshGenerator.UpdateMesh();
 

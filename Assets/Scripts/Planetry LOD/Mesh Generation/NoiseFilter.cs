@@ -6,13 +6,25 @@ public class NoiseFilter
 {
     Shape_Settings shapeSettings = new Shape_Settings();
     Noise noise = new Noise();
+    Noise_Settings noiseSettings;
 
     public NoiseFilter(Shape_Settings shapeSettings)
     {
         this.shapeSettings = shapeSettings;
     }
 
+    public NoiseFilter(Noise_Settings noiseSettings)
+    {
+        this.noiseSettings = noiseSettings;
+    }
+
     public float noiseEvaluation(Vector3 point)
+    {
+        float noisevalue = (noise.Evaluate(point) + 1) * 0.5f;
+        return noisevalue;
+    }
+
+    public float noiseEvaluationBiome(Vector3 point)
     {
         float noisevalue = (noise.Evaluate(point) + 1) * 0.5f;
         return noisevalue;
@@ -90,6 +102,28 @@ public class NoiseFilter
         if (shapeSettings.noiseLayer[a].noiseSettings.seaClamp)
         {
             noiseValue = Mathf.Max(0, noiseValue - shapeSettings.noiseLayer[a].noiseSettings.minValue);
+        }
+
+        return noiseValue;
+    }
+
+    public float SimpleNoiseValueBiome(Vector3 pointOnSphere)
+    {
+        float noiseValue = 0;
+        float frequency = noiseSettings.baseRoughness;
+        float amplitude = 1;
+
+        for (int i = 0; i < noiseSettings.numOfLayers; i++)
+        {
+            float v = noise.Evaluate(pointOnSphere * frequency + noiseSettings.center);
+            noiseValue += (v + 1) * 0.5f * amplitude;
+            frequency *= noiseSettings.roughness;
+            amplitude *= noiseSettings.persistance;
+        }
+
+        if (noiseSettings.seaClamp)
+        {
+            noiseValue = Mathf.Max(0, noiseValue - noiseSettings.minValue);
         }
 
         return noiseValue;

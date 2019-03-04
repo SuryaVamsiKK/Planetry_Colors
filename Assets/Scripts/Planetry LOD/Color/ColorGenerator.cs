@@ -8,13 +8,13 @@ public class ColorGenerator : MonoBehaviour
     public Material material;
     public Texture2D texture;
     const int resolution = 50;
+    NoiseFilter biomeNoiseFilter;
 
     public void CreateMaterial(float min, float max)
     {
-
-        if(texture == null)
+        if(texture == null || texture.height != settings.biomeColorSettings.biomes.Length)
         {
-            texture = new Texture2D(resolution, 1); 
+            texture = new Texture2D(resolution, settings.biomeColorSettings.biomes.Length); 
         }
 
         if (material == null)
@@ -35,13 +35,59 @@ public class ColorGenerator : MonoBehaviour
 
     void UpdateColor()
     {
-        Color[] colors = new Color[resolution];
-        for (int i = 0; i < resolution; i++)
+        Color[] colors = new Color[texture.width * texture.height];
+        int colorIndex = 0;
+        foreach(var biomes in settings.biomeColorSettings.biomes)
         {
-            colors[i] = settings.planetColor.Evaluate(i / (resolution - 1f));
+            for (int i = 0; i < resolution; i++)
+            {
+                Color grdiantColor = biomes.gradient.Evaluate(i / (resolution - 1f));
+                Color tintCol = biomes.tint;
+
+                colors[colorIndex] = grdiantColor * (1 - biomes.tintPercent) + tintCol * biomes.tintPercent;
+                colorIndex++;
+            }
         }
         texture.SetPixels(colors);
         texture.Apply();
         material.SetTexture("_pColor", texture);
     }
+
+    public float biomePercentFromPoint(Vector3 pointOnUnitSphere)
+    {
+        biomeNoiseFilter = new NoiseFilter(settings.biomeColorSettings.noise);
+        float heightPercent = (pointOnUnitSphere.y + 1) / 2f;
+        if (biomeNoiseFilter != null)
+        {
+            heightPercent += (biomeNoiseFilter.SimpleNoiseValueBiome(pointOnUnitSphere) - settings.biomeColorSettings.noiseOffset) * settings.biomeColorSettings.noiseStrengeth;
+        }
+        float biomeIndex = 0;
+        int numBiomes = settings.biomeColorSettings.biomes.Length;
+        float blendRange = settings.biomeColorSettings.blendAmount / 2f + 0.00001f;
+        for (int i = 0; i < numBiomes; i++)
+        {
+            //if (settings.biomeColorSettings.biomes[i].startHeight < heightPercent)
+            //{
+            //    biomeIndex = i;
+            //}
+            //else
+            //{
+            //    break;
+            //}
+            float dst = heightPercent - settings.biomeColorSettings.biomes[i].startHeight;
+            float weight = Mathf.InverseLerp(-blendRange, blendRange, dst);
+            biomeIndex *= (1 - weight);
+            biomeIndex += i * weight;
+
+        }
+
+        return biomeIndex / Mathf.Max(1, numBiomes - 1);
+
+    }
+
+    private void OnValidate()
+    {
+        GetComponent<PlanetGenerator>().CreatePlanet();
+    }
+
 }

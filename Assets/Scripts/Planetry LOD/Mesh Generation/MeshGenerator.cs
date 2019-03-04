@@ -15,6 +15,7 @@ public class MeshGenerator : MonoBehaviour
 
     #region Dimensions
 
+    [HideInInspector] public ColorGenerator colorGenerator;
     [HideInInspector] public float side;
     [HideInInspector] public Shape_Settings shapeSettings;
     [HideInInspector] public Vector3 localUp = Vector3.up;
@@ -33,11 +34,12 @@ public class MeshGenerator : MonoBehaviour
     Vector3[] verts;
     int[] triangles;   
     Mesh mesh;
+    Vector2[] uvs;
     public Material mat;
 
     #endregion
 
-    private void Update()
+    private void UpdateColor()
     {
         if(lod <= 1)
         {
@@ -55,6 +57,7 @@ public class MeshGenerator : MonoBehaviour
 
         mesh = new Mesh();
         verts = new Vector3[(shapeSettings.resolution + 1) * (shapeSettings.resolution + 1)];
+        uvs = new Vector2[(shapeSettings.resolution + 1) * (shapeSettings.resolution + 1)];
 
         triangles = new int[(shapeSettings.resolution) * (shapeSettings.resolution) * 6]; 
         int vert = 0; 
@@ -106,9 +109,10 @@ public class MeshGenerator : MonoBehaviour
                 float elevaltion = 0;
                 verts[i] = (localUp + (localVert.x + pos) * scale * axisA - (localVert.y + pos) * scale * axisB);
                 verts[i] = verts[i].normalized;               
+                uvs[i] = new Vector2(colorGenerator.biomePercentFromPoint(verts[i]), 0);
                 verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i], out elevaltion);
 
-                if(lod == 0)
+                if (lod == 0)
                 {
                     transform.parent.GetComponent<PlanetGenerator>().elevationMinMax.AddValue(elevaltion);
                 }
@@ -156,7 +160,9 @@ public class MeshGenerator : MonoBehaviour
         mesh.Clear();
         mesh.vertices = verts;
         mesh.triangles = triangles;
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
+        mesh.uv = uvs;
         GetComponent<MeshFilter>().sharedMesh = mesh;
         GetComponent<MeshRenderer>().sharedMaterial = mat;
     }
