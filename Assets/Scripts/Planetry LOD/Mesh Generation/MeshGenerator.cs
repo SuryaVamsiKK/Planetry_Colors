@@ -110,7 +110,7 @@ public class MeshGenerator : MonoBehaviour
 
                 if(lod == 0)
                 {
-                   transform.parent.GetComponent<PlanetGenerator>().elevationMinMax.AddValue(elevaltion);
+                    transform.parent.GetComponent<PlanetGenerator>().elevationMinMax.AddValue(elevaltion);
                 }
 
                 //Transform root = transform.parent;
