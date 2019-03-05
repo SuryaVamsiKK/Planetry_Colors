@@ -30,11 +30,12 @@ public class NoiseFilter
         return noisevalue;
     }
 
-    public Vector3 CalculatePointOnPlanet(Vector3 pointOnSphere, out float elevation)
+    public Vector3 CalculatePointOnPlanet(Vector3 pointOnSpher, Vector3 Pos, out float elevation)
     {
         //float elaviation = (noiseEvaluation(pointOnSphere * noiseSettings.roughness + noiseSettings.center)) * noiseSettings.strength;
         //return pointOnSphere * shapeSettings.radius * (elaviation + 1f);
         float elaviation = 0;
+        Vector3 pointOnSphere = pointOnSpher;
         for (int a = 0; a < shapeSettings.noiseLayer.Length; a++)
         {
             if(shapeSettings.noiseLayer[a].enable)

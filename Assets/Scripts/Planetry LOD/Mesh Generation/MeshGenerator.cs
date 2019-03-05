@@ -110,7 +110,7 @@ public class MeshGenerator : MonoBehaviour
                 verts[i] = (localUp + (localVert.x + pos) * scale * axisA - (localVert.y + pos) * scale * axisB);
                 verts[i] = verts[i].normalized;               
                 uvs[i] = new Vector2(colorGenerator.biomePercentFromPoint(verts[i]), 0);
-                verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i], out elevaltion);
+                verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i], this.transform.position, out elevaltion);
 
                 if (lod == 0)
                 {
@@ -186,5 +186,15 @@ public class MeshGenerator : MonoBehaviour
             verts[i] = verts[i] - this.transform.position + transform.root.position;        
        }
 
+        GetComponent<MeshRenderer>().sharedMaterial.SetVector("_planetCenter", this.transform.position);
+    }
+
+    public Material selfMat(Material mat)
+    {
+        Material material = new Material(mat.shader);
+
+        //material.SetVector()
+
+        return material;
     }
 }

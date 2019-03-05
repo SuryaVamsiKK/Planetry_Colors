@@ -57,32 +57,21 @@ public class ColorGenerator : MonoBehaviour
     {
         biomeNoiseFilter = new NoiseFilter(settings.biomeColorSettings.noise);
         float heightPercent = (pointOnUnitSphere.y + 1) / 2f;
-        if (biomeNoiseFilter != null)
-        {
-            heightPercent += (biomeNoiseFilter.SimpleNoiseValueBiome(pointOnUnitSphere) - settings.biomeColorSettings.noiseOffset) * settings.biomeColorSettings.noiseStrengeth;
-        }
+
+        heightPercent += (biomeNoiseFilter.SimpleNoiseValueBiome(pointOnUnitSphere) - settings.biomeColorSettings.noiseOffset) * settings.biomeColorSettings.noiseStrengeth;
+
         float biomeIndex = 0;
         int numBiomes = settings.biomeColorSettings.biomes.Length;
         float blendRange = settings.biomeColorSettings.blendAmount / 2f + 0.00001f;
         for (int i = 0; i < numBiomes; i++)
         {
-            //if (settings.biomeColorSettings.biomes[i].startHeight < heightPercent)
-            //{
-            //    biomeIndex = i;
-            //}
-            //else
-            //{
-            //    break;
-            //}
             float dst = heightPercent - settings.biomeColorSettings.biomes[i].startHeight;
             float weight = Mathf.InverseLerp(-blendRange, blendRange, dst);
             biomeIndex *= (1 - weight);
             biomeIndex += i * weight;
-
         }
 
         return biomeIndex / Mathf.Max(1, numBiomes - 1);
-
     }
 
     private void OnValidate()
