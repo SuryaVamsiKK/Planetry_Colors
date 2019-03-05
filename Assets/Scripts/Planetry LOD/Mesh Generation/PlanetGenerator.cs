@@ -118,7 +118,7 @@ public class PlanetGenerator : MonoBehaviour {
         min = elevationMinMax.Min;
         max = elevationMinMax.Max;
 
-        GetComponent<ColorGenerator>().CreateMaterial(min, max);
+        GetComponent<ColorGenerator>().CreateMaterial(max, min);
         mat = GetComponent<ColorGenerator>().material;
     }
 }

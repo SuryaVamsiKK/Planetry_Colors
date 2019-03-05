@@ -55,7 +55,8 @@ public class NoiseFilter
         }
 
         elaviation = shapeSettings.radius * (elaviation + 1f);
-        elevation = elaviation - ((shapeSettings.radius + 1f)/10f);
+        //elevation = elaviation - ((shapeSettings.radius/2f) + 1f)/10f);
+        elevation = elaviation;
         return pointOnSphere * elaviation;
     }
 

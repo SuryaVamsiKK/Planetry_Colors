@@ -164,7 +164,7 @@ public class MeshGenerator : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.uv = uvs;
         GetComponent<MeshFilter>().sharedMesh = mesh;
-        GetComponent<MeshRenderer>().sharedMaterial = mat;
+        SetMaterial(mat);
     }
 
     void CalculateCenter(Vector3[] verts)
@@ -185,16 +185,18 @@ public class MeshGenerator : MonoBehaviour
        {
             verts[i] = verts[i] - this.transform.position + transform.root.position;        
        }
-
-        GetComponent<MeshRenderer>().sharedMaterial.SetVector("_planetCenter", this.transform.position);
     }
 
-    public Material selfMat(Material mat)
+    public void SetMaterial(Material mat)
     {
         Material material = new Material(mat.shader);
 
-        //material.SetVector()
+        material.SetVector("_elivationMinMax", mat.GetVector("_elivationMinMax"));
+        material.SetTexture("_pColor", mat.GetTexture("_pColor"));
+        material.SetFloat("_smoothness", mat.GetFloat("_smoothness"));
+        material.SetFloat("_specular", mat.GetFloat("_specular"));
+        material.SetVector("_planetCenter", this.transform.position);
 
-        return material;
+        GetComponent<MeshRenderer>().material = material;
     }
 }

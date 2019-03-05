@@ -44,7 +44,7 @@ public class ColorGenerator : MonoBehaviour
                 Color grdiantColor = biomes.gradient.Evaluate(i / (resolution - 1f));
                 Color tintCol = biomes.tint;
 
-                colors[colorIndex] = grdiantColor * (1 - biomes.tintPercent) + tintCol * biomes.tintPercent;
+                colors[colorIndex] = (grdiantColor * (1 - biomes.tintPercent)) + (tintCol * biomes.tintPercent);
                 colorIndex++;
             }
         }
