@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class MeshGenerator : MonoBehaviour
 {
     #region LOD
@@ -39,6 +40,9 @@ public class MeshGenerator : MonoBehaviour
 
     #endregion
 
+    public Transform planetCore;
+    public Transform mainFace;
+
     private void UpdateColor()
     {
         if(lod <= 1)
@@ -49,6 +53,12 @@ public class MeshGenerator : MonoBehaviour
 
     public void CreateShape()
     {
+
+        if (lod > 0)
+        {
+            mainFace = transform.parent;            
+        }
+
         #region Initalization
 
         noiseFilter = new NoiseFilter(shapeSettings);
@@ -62,6 +72,18 @@ public class MeshGenerator : MonoBehaviour
         triangles = new int[(shapeSettings.resolution) * (shapeSettings.resolution) * 6]; 
         int vert = 0; 
         int triIndex = 0;
+
+        if(planetCore == null)
+        {
+            if (transform.parent.GetComponent<MeshGenerator>() != null)
+            {
+                planetCore = transform.parent.GetComponent<MeshGenerator>().planetCore;
+            }
+            else
+            {
+                planetCore = transform.parent;
+            }
+        }
 
         #endregion
 
@@ -108,9 +130,11 @@ public class MeshGenerator : MonoBehaviour
 
                 float elevaltion = 0;
                 verts[i] = (localUp + (localVert.x + pos) * scale * axisA - (localVert.y + pos) * scale * axisB);
-                verts[i] = verts[i].normalized;               
+                verts[i] = verts[i].normalized;
                 uvs[i] = new Vector2(colorGenerator.biomePercentFromPoint(verts[i]), 0);
+
                 verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i], this.transform.position, out elevaltion);
+
 
                 if (lod == 0)
                 {
@@ -154,6 +178,11 @@ public class MeshGenerator : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        GetComponent<MeshRenderer>().sharedMaterial.SetVector("_planetCenter", planetCore.position);
+    }
+
     public void UpdateMesh()
     {
         CalculateCenter(verts);
@@ -179,24 +208,47 @@ public class MeshGenerator : MonoBehaviour
         //this.transform.position = (sum/verts.Length) + transform.root.position;
         #endregion
 
-        transform.position = verts[(verts.Length / 2)]; // To put the pivot at the middle vertice.
+        transform.position = verts[(verts.Length / 2)]; // To put the pivot at the exact middle vertice. For further control over LOD.
        
        for (int i = 0; i < verts.Length; i++)
        {
-            verts[i] = verts[i] - this.transform.position + transform.root.position;        
+            verts[i] = verts[i] - this.transform.position;
        }
+       
+       Vector3 pose = planetCore.position + (planetCore.rotation * transform.position);
+       transform.position = pose;
     }
 
     public void SetMaterial(Material mat)
     {
-        Material material = new Material(mat.shader);
-
+        if(mat != this.mat)
+        {
+            Material material = new Material(mat.shader);
+            UpdateMaterial(material);
+        }
+        else
+        {
+            UpdateMaterial(mat);
+        }
+    }
+    
+    void UpdateMaterial(Material material)
+    {
         material.SetVector("_elivationMinMax", mat.GetVector("_elivationMinMax"));
         material.SetTexture("_pColor", mat.GetTexture("_pColor"));
         material.SetFloat("_smoothness", mat.GetFloat("_smoothness"));
         material.SetFloat("_specular", mat.GetFloat("_specular"));
-        material.SetVector("_planetCenter", this.transform.position);
-
+        material.SetVector("_planetCenter", planetCore.position);
+        /* 
+         * FUCKING DUCK THE BIGGEST BUG OF LIFE ..... 
+         * The shader evaluation of hight was in object space meaing local space but since 
+         * the planet is being rotated the face's position is alred but still doing a stupid thing of taking the world positions like is shit face idiot ...
+         * original line ||  material.SetVector("_planetCenter", this.transform.position - planetCore.position);    ||
+         * changed Line  ||  material.SetVector("_planetCenter", this.transform.localPosition);                     ||
+         * 
+         * 
+         * well GG transform.localposition ate up the god damn LOD shaders so changed the approch of the shader it self !!
+        */
         GetComponent<MeshRenderer>().material = material;
     }
 }

@@ -29,8 +29,6 @@ public class QuadTreePlanetry : MonoBehaviour
 
     void Update()
     {
-        
-
         if(Vector3.Distance(GameObject.FindGameObjectWithTag("Player").transform.position, transform.position) < threshold && maxDepth > 0)
         {
             divide = true;
@@ -54,12 +52,17 @@ public class QuadTreePlanetry : MonoBehaviour
         }
     }
 
+    private void OnValidate()
+    {
+        quadTree();
+    }
+
     void quadTree()
     {
-        if(GetComponent<MeshGenerator>().lod <= 0)
-        {
-            GetComponent<MeshGenerator>().mat = transform.parent.GetComponent<PlanetGenerator>().mat;
-        }
+        //if(GetComponent<MeshGenerator>().lod <= 0)
+        //{
+        //    GetComponent<MeshGenerator>().mat = transform.parent.GetComponent<>().mat;
+        //}
 
         if(divide)
         {

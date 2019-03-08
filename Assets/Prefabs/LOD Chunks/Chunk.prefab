@@ -48,16 +48,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lod: 0
   chunk: {fileID: 0}
-  resolution: 2
-  side: 0
-  radius: 0
-  localUp: {x: 0, y: 0, z: -1}
-  roughness: 0
-  strength: 0
-  center: {x: 0, y: 0, z: 0}
-  mat: {fileID: 2100000, guid: 68ed928803553894d9f77e2c48b30dc2, type: 2}
   quad_Location: 0
   planerRefrence: {x: 0, y: 0}
+  colorGenerator: {fileID: 0}
+  side: 0
+  shapeSettings:
+    resolution: 10
+    realResolution: 10
+    radius: 0
+    noiseLayer: []
+  localUp: {x: 0, y: 0, z: -1}
+  mat: {fileID: 2100000, guid: 68ed928803553894d9f77e2c48b30dc2, type: 2}
+  planetCore: {fileID: 0}
 --- !u!33 &4626136898307257170
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -115,5 +117,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963c747e559354e4c8a983da1a972a45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  threshold: 2
   divide: 0
   recreate: 0
+  revertToHigherLOD: 0
+  maxDepth: 0

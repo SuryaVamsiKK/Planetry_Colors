@@ -27,7 +27,7 @@ public class PlanetGenerator : MonoBehaviour {
         CreatePlanet();
     }
 
-    public void CreatePlanet () 
+    public void CreatePlanet ()
     {
         elevationMinMax = new MinMax();
         if (!singleFace)
