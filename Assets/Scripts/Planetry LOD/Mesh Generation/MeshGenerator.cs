@@ -131,23 +131,44 @@ public class MeshGenerator : MonoBehaviour
                 float elevaltion = 0;
                 verts[i] = (localUp + (localVert.x + pos) * scale * axisA - (localVert.y + pos) * scale * axisB);
                 verts[i] = verts[i].normalized;
-                uvs[i] = new Vector2(colorGenerator.biomePercentFromPoint(verts[i]), 0);
+                uvs[i] = new Vector2(colorGenerator.biomePercentFromPoint(verts[i]), 0);        // 1. Biome Index to UVs
 
-                verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i], this.transform.position, out elevaltion);
+                verts[i] = noiseFilter.CalculatePointOnPlanet(verts[i], this.transform.position, out elevaltion);   // 2. Vertice height to elevation
 
 
                 if (lod == 0)
                 {
-                    transform.parent.GetComponent<PlanetGenerator>().elevationMinMax.AddValue(elevaltion);
+                    #region Explanation
+                    /*
+                     * This for the lower LODs to use the highest lod as 
+                     * the base because the lower lod might spwan on the 
+                     * hill and its lowest point might be something differnt.
+                     * 
+                     */
+                    #endregion
+
+                    transform.parent.GetComponent<PlanetGenerator>().elevationMinMax.AddValue(elevaltion);                    
                 }
 
-                //Transform root = transform.parent;
-                //for (int a = 0; a < lod; a++)
-                //{
-                //    root = transform.parent;
-                //}
-                //root.GetComponent<PlanetGenerator>().elevationMinMax.AddValue(elevaltion);
-
+                /*
+                 *  1.  Biome index can be extracted from that point for which type of object to spwan and change its values accordingly 
+                 *  
+                 *  2.  Based on the elevation and elevation minmax values,
+                 *      we can extract vertice's height position from the planet for 
+                 *      spwaning different objects at different heights.
+                 *      
+                 *  CAUTION : if you are spwaning the trees when the chunks are loading as they are getting instanciated ... 
+                 *            well better store all the chosen vertice's positions into a seperate save file or somewhere and better 
+                 *            read from that from next time as it shuld be the same the next time the player comes there .... 
+                 *            which might just be a huge problem    ... mainly should be used for resources and structures that can be big like tress and things 
+                 *            (not for the foilage like grass) which can quite be randomized.
+                 *            
+                 *            or 
+                 *            
+                 *            do not randomly choose ... right a formula which can store just the seed and randomly place the objects based on the seed which can be quite 
+                 *            ... i think thats how it supposed to be done ...... like the planets as they are same everytime they are generated.
+                 *  
+                 */
 
                 i++;
 
